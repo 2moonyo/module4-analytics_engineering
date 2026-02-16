@@ -20,4 +20,5 @@ wheels/
 target/
 dbt_packages/
 logs/
+taxi_ny_local/
 # end dbt Cloud content

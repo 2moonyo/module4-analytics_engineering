@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw_data
+  - description: "Raw data from the taxi trips, stored in GCS"
+  - database: module4-analytics-engineering
+  - schema: ny_taxi
+  - tables:
+      - name: yellow
+
+      - name: green_taxi
+        
