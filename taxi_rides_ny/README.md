@@ -26,7 +26,7 @@ This will install all required Python packages and dbt dependencies.
 Run the main ingestion script to download and load yellow and green taxi data (2019-2020) into the DuckDB database:
 
 ```bash
-uv run python ingest.py
+uv run ingest.py
 ```
 
 This script will:
@@ -39,7 +39,7 @@ This script will:
 Load the FHV taxi data for 2019:
 
 ```bash
-uv run python ingest_stg_fhv_ny.py --fhv --years "2019"
+uv run ingest_stg_fhv_ny.py --fhv --years "2019"
 ```
 
 This will:
