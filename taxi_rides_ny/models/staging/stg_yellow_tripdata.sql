@@ -6,18 +6,19 @@ with tripdata as (
 
 renamed as (
   select
+      'yellow' as taxi_type,
       -- identifiers
       cast(vendorid as integer) as vendor_id,
       cast(ratecodeid as integer) as rate_code_id,
-      cast(pulocationid as integer) as pickup_locationid,
-      cast(dolocationid as integer) as dropoff_locationid,
+      cast(pulocationid as integer) as pickup_location_id,
+      cast(dolocationid as integer) as dropoff_location_id,
       
       -- timestamps
       cast(tpep_pickup_datetime as timestamp) as pickup_datetime,
       cast(tpep_dropoff_datetime as timestamp) as dropoff_datetime,
       
       -- trip info
-      store_and_fwd_flag,
+      cast(store_and_fwd_flag as string) as store_and_fwd_flag,
       cast(passenger_count as integer) as passenger_count,
       cast(trip_distance as numeric) as trip_distance,
       1 as trip_type, --yellow taxi can only be street-hail, so we can set this to 1 for all records

@@ -1,0 +1,87 @@
+version: 2
+
+models:
+  - name: fct_monthly_revenue_per_location
+    description: Monthly aggregated revenue and trip metrics by pickup location and taxi type
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: revenue_month
+        description: First day of the month for revenue aggregation
+        data_type: date
+        data_tests:
+          - not_null
+      - name: pickup_location_id
+        description: TLC Taxi Zone where trips started
+        data_type: integer
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_zones')
+                field: location_id
+      - name: pickup_zone
+        description: Specific zone where trips started
+        data_type: string
+      - name: pickup_borough
+        description: NYC borough where trips started
+        data_type: string
+      - name: taxi_type
+        description: Type of taxi service (green or yellow)
+        data_type: string
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['green', 'yellow']
+          - not_null
+      - name: total_trips
+        description: Total number of trips in the month/location
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: total_revenue
+        description: Sum of total_amount for all trips
+        data_type: decimal(38,3)
+      - name: total_fare_amount
+        description: Sum of fare_amount for all trips
+        data_type: decimal(38,3)
+      - name: total_extra
+        description: Sum of extra charges for all trips
+        data_type: decimal(38,3)
+      - name: total_mta_tax
+        description: Sum of MTA tax for all trips
+        data_type: decimal(38,3)
+      - name: total_tip_amount
+        description: Sum of tip amounts for all trips
+        data_type: decimal(38,3)
+      - name: total_tolls_amount
+        description: Sum of tolls for all trips
+        data_type: decimal(38,3)
+      - name: total_improvement_surcharge
+        description: Sum of improvement surcharges for all trips
+        data_type: decimal(38,3)
+      - name: avg_revenue_per_trip
+        description: Average total_amount per trip
+        data_type: double
+      - name: avg_fare_amount
+        description: Average fare_amount per trip
+        data_type: double
+      - name: avg_tip_amount
+        description: Average tip_amount per trip
+        data_type: double
+      - name: avg_trip_distance
+        description: Average trip distance in miles
+        data_type: double
+      - name: avg_trip_duration_minutes
+        description: Average trip duration in minutes
+        data_type: double
+      - name: avg_passenger_count
+        description: Average number of passengers per trip
+        data_type: double
+      - name: total_distance
+        description: Sum of trip distances in miles
+        data_type: decimal(38,3)
+      - name: total_passengers
+        description: Sum of passenger counts across all trips
+        data_type: hugeint
