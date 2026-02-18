@@ -51,3 +51,4 @@ group by
     pickup_zone,
     pickup_borough,
     taxi_type    
+

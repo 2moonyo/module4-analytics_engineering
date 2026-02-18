@@ -5,3 +5,12 @@ logs/
 
 # Data directory
 data/
+
+# DuckDB database files
+*.duckdb
+*.duckdb.wal
+*.db
+*.db.wal
+
+# Parquet files
+*.parquet

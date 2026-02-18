@@ -91,3 +91,22 @@ sources:
             description: Improvement surcharge
           - name: total_amount
             description: Total amount charged
+
+      - name: fhv_tripdata
+        description: Raw FHV (For-Hire Vehicle) trip records for 2019
+        loaded_at_field: pickup_datetime
+        columns:
+          - name: dispatching_base_num
+            description: "TLC Base License Number of the base that dispatched the trip - Note: Raw data may contain nulls, filtered in staging"
+          - name: pickup_datetime
+            description: Date and time when the passenger(s) were picked up
+          - name: dropoff_datetime
+            description: Date and time when the passenger(s) were dropped off
+          - name: pulocationid
+            description: TLC Taxi Zone where the passenger(s) were picked up
+          - name: dolocationid
+            description: TLC Taxi Zone where the passenger(s) were dropped off
+          - name: sr_flag
+            description: Shared ride flag (indicates if trip was a shared ride)
+          - name: affiliated_base_number
+            description: Base number affiliated with the dispatcher

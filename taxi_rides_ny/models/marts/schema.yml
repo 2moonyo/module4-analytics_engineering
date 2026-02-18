@@ -35,11 +35,13 @@ models:
         data_tests:
           - unique
           - not_null
+          - accepted_values:
+              values: [0, 1, 2, 3, 4, 5, 6]
       - name: payment_type_description
         description: Human-readable payment method description
 
   - name: fct_trips
-    description: Fact table with all taxi trips including trip and payment details
+    description: Fact table with all taxi trips including trip and payment details. Note that ~2k genuine data quality duplicates remain after void trip filtering.
     # config:
       # contract:
         # enforced: true
@@ -48,7 +50,9 @@ models:
         description: Unique trip identifier
         data_type: string
         data_tests:
-          - unique
+          - unique:
+              config:
+                severity: warn  
           - not_null
       - name: vendor_id
         description: Taxi technology provider

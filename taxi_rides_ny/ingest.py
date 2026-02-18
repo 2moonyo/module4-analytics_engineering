@@ -1,6 +1,7 @@
 import duckdb
 import requests
 from pathlib import Path
+import click
 
 BASE_URL = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download"
 
@@ -51,20 +52,43 @@ def update_gitignore():
         with open(gitignore_path, 'a') as f:
             f.write('\n# Data directory\ndata/\n' if content else '# Data directory\ndata/\n')
 
-if __name__ == "__main__":
-    # Update .gitignore to exclude data directory
-    update_gitignore()
-
-    for taxi_type in ["yellow", "green"]:
-        download_and_convert_files(taxi_type)
-
+def load_to_duckdb():
+    """Load parquet files into DuckDB tables."""
+    print("Loading parquet files into DuckDB...")
     con = duckdb.connect("taxi_rides_ny.duckdb")
     con.execute("CREATE SCHEMA IF NOT EXISTS prod")
 
     for taxi_type in ["yellow", "green"]:
+        print(f"Creating prod.{taxi_type}_tripdata table...")
         con.execute(f"""
             CREATE OR REPLACE TABLE prod.{taxi_type}_tripdata AS
             SELECT * FROM read_parquet('data/{taxi_type}/*.parquet', union_by_name=true)
         """)
+        
+        # Get row count
+        result = con.execute(f"SELECT COUNT(*) FROM prod.{taxi_type}_tripdata").fetchone()
+        print(f"  Loaded {result[0]:,} rows")
 
     con.close()
+    print("DuckDB loading complete!")
+
+@click.command()
+@click.option('--skip-download', is_flag=True, help='Skip downloading files and only load to DuckDB')
+@click.option('--download-only', is_flag=True, help='Only download files without loading to DuckDB')
+def main(skip_download, download_only):
+    """Ingest NYC taxi data: download parquet files and/or load into DuckDB."""
+    
+    if not skip_download:
+        # Update .gitignore to exclude data directory
+        update_gitignore()
+        
+        # Download and convert files
+        for taxi_type in ["yellow", "green"]:
+            download_and_convert_files(taxi_type)
+    
+    if not download_only:
+        # Load to DuckDB
+        load_to_duckdb()
+
+if __name__ == "__main__":
+    main()
